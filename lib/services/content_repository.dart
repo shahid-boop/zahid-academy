@@ -135,6 +135,12 @@ class ContentRepository {
     return item;
   }
 
+  /// Admin: uploaded content ki details edit karein.
+  static Future<void> updateContent(AppFile item) async {
+    if (!FirebaseService.isAvailable) return;
+    await _col.doc(item.id).update(item.toMap());
+  }
+
   static Future<void> setPublished(String id, bool value) async {
     if (!FirebaseService.isAvailable) return;
     await _col.doc(id).update({'published': value});

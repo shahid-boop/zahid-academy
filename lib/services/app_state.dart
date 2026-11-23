@@ -53,7 +53,7 @@ class AppState extends ChangeNotifier {
 
   String selectedSize = '5 Marla';
   String lang = 'EN'; // EN | UR | AR
-  String whatsappNumber = '';
+  String whatsappNumber = '0346-7803931';
   String jazzcashNumber = '';
   String easypaisaNumber = '';
   String downloadBaseUrl = '';
@@ -89,6 +89,9 @@ class AppState extends ChangeNotifier {
     selectedSize = _storage.getString(StorageService.kSelectedSize) ?? '5 Marla';
     lang = _storage.getString(StorageService.kLang) ?? 'EN';
     whatsappNumber = _storage.getString(StorageService.kWhatsapp) ?? '';
+    if (whatsappNumber.trim().isEmpty) {
+      whatsappNumber = '0346-7803931';
+    }
     jazzcashNumber = _storage.getString(StorageService.kJazzcash) ?? '';
     easypaisaNumber = _storage.getString(StorageService.kEasypaisa) ?? '';
     downloadBaseUrl = _storage.getString(StorageService.kBaseUrl) ?? '';

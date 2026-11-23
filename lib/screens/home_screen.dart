@@ -343,18 +343,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
+          Center(
+            child: IconButton(
+              tooltip: s.t('whatsapp_contact'),
+              style: IconButton.styleFrom(
                 backgroundColor: Colors.green.shade700,
                 foregroundColor: Colors.white,
               ),
               onPressed: () => app.openWhatsApp(
                 'Assalam-o-Alaikum, Mujhe Zahid Architecture Academy ki Subscription chahiye',
               ),
-              icon: const Icon(Icons.chat),
-              label: Text(s.t('whatsapp_contact')),
+              icon: const Icon(Icons.chat, size: 28),
             ),
           ),
         ],

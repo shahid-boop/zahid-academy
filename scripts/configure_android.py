@@ -169,10 +169,27 @@ def patch_manifest() -> None:
         text, n = re.subn(r'(<manifest\b[^>]*>)', r'\1\n    ' + perm, text, count=1)
         if n == 0:
             fail("could not inject INTERNET permission")
-        MANIFEST.write_text(text, encoding="utf-8")
         print("configure_android: INTERNET permission added")
-    else:
-        print("configure_android: INTERNET permission already present")
+
+    # WhatsApp / browser apps ke liye package visibility (Android 11+).
+    # Iske bina canLaunchUrl('whatsapp://...') hamesha false deta hai.
+    if '<queries>' not in text:
+        queries = (
+            '    <queries>\n'
+            '        <package android:name="com.whatsapp"/>\n'
+            '        <package android:name="com.whatsapp.w4b"/>\n'
+            '        <intent>\n'
+            '            <action android:name="android.intent.action.VIEW"/>\n'
+            '            <data android:scheme="https"/>\n'
+            '        </intent>\n'
+            '    </queries>\n'
+        )
+        text, n = re.subn(r'(<manifest\b[^>]*>)', r'\1\n' + queries, text, count=1)
+        if n == 0:
+            fail("could not inject <queries>")
+        print("configure_android: WhatsApp <queries> added")
+
+    MANIFEST.write_text(text, encoding="utf-8")
 
 
 if __name__ == "__main__":

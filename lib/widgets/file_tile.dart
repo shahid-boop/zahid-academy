@@ -5,6 +5,7 @@ import '../l10n/strings.dart';
 import '../models/app_file.dart';
 import '../services/app_state.dart';
 import '../services/launcher_service.dart';
+import '../screens/preview_screen.dart';
 import 'payment_dialog.dart';
 
 class FileTile extends StatelessWidget {
@@ -101,10 +102,10 @@ class FileTile extends StatelessWidget {
   }
 
   void _openPreview(BuildContext context, AppState app, S s) {
-    final messenger = ScaffoldMessenger.of(context);
-    LauncherService.openUrl(file.url!).then((ok) {
-      if (!ok) messenger.showSnackBar(SnackBar(content: Text(s.t('open_failed'))));
-    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => PreviewScreen(file: file)),
+    );
   }
 
   void _handleDownload(

@@ -216,6 +216,109 @@ class _ContentTabState extends State<_ContentTab> {
     }
   }
 
+  void _showEdit(BuildContext context, AppState app, S s, AppFile item) {
+    final title = TextEditingController(text: item.name);
+    String category = item.category;
+    FileKind kind = item.kind;
+    bool premium = item.isPremium;
+
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return AlertDialog(
+              title: Text(s.t('edit_content')),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: title,
+                      decoration: InputDecoration(labelText: s.t('content_name')),
+                    ),
+                    const SizedBox(height: 10),
+                    DropdownButtonFormField<String>(
+                      value: category,
+                      isExpanded: true,
+                      decoration:
+                          InputDecoration(labelText: s.t('content_category')),
+                      items: [
+                        ...AppData.categories,
+                        ...AppData.sizes.map((size) => 'Maps - $size'),
+                        if (![
+                          ...AppData.categories,
+                          ...AppData.sizes.map((size) => 'Maps - $size'),
+                        ].contains(category))
+                          category,
+                      ]
+                          .map((c) =>
+                              DropdownMenuItem(value: c, child: Text(c)))
+                          .toList(),
+                      onChanged: (v) {
+                        if (v != null) {
+                          setDialogState(() => category = v);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    DropdownButtonFormField<FileKind>(
+                      value: kind,
+                      isExpanded: true,
+                      decoration: InputDecoration(labelText: s.t('file_type')),
+                      items: FileKind.values
+                          .map((k) =>
+                              DropdownMenuItem(value: k, child: Text(k.name)))
+                          .toList(),
+                      onChanged: (v) {
+                        if (v != null) setDialogState(() => kind = v);
+                      },
+                    ),
+                    SwitchListTile(
+                      value: premium,
+                      title: Text(s.t('premium_only')),
+                      onChanged: (v) => setDialogState(() => premium = v),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: Text(s.t('cancel')),
+                ),
+                FilledButton(
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    await ContentRepository.updateContent(
+                      AppFile(
+                        id: item.id,
+                        name: title.text.trim(),
+                        category: category,
+                        kind: kind,
+                        url: item.url,
+                        sizeLabel: item.sizeLabel,
+                        publishedAtMs: item.publishedAtMs,
+                        isPremium: premium,
+                        published: item.published,
+                        thumbnailUrl: item.thumbnailUrl,
+                      ),
+                    );
+                    if (ctx.mounted) Navigator.pop(ctx);
+                    messenger.showSnackBar(
+                      SnackBar(content: Text(s.t('saved'))),
+                    );
+                  },
+                  child: Text(s.t('save')),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = widget.s;
@@ -308,6 +411,11 @@ class _ContentTabState extends State<_ContentTab> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  IconButton(
+                    tooltip: s.t('edit'),
+                    icon: const Icon(Icons.edit_outlined),
+                    onPressed: () => _showEdit(context, app, s, item),
+                  ),
                   IconButton(
                     icon: Icon(
                       item.published ? Icons.visibility_off : Icons.visibility,
