@@ -49,6 +49,10 @@ def set_sdk_versions(text: str) -> str:
     text = re.sub(r'minSdk\s*=\s*\d+', 'minSdk = 21', text)
     text = re.sub(r'targetSdkVersion\s+\d+', 'targetSdkVersion 35', text)
     text = re.sub(r'targetSdk\s*=\s*\d+', 'targetSdk = 35', text)
+    # Flutter 3.5x ke plugins (file_picker / lifecycle) ko compileSdk >= 36 chahiye.
+    text = re.sub(r'compileSdkVersion\s+\d+', 'compileSdkVersion 36', text)
+    text = re.sub(r'compileSdk\s*=\s*\d+', 'compileSdk = 36', text)
+    text = re.sub(r'compileSdk\s+\d+', 'compileSdk 36', text)
     return text
 
 

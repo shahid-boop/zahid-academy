@@ -53,7 +53,9 @@ jobs:
       - name: Install Android SDK packages
         run: |
           yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --licenses > /dev/null 2>&1 || true
-          "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" "platforms;android-35" "build-tools;35.0.0"
+          "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" \
+            "platforms;android-35" "platforms;android-36" \
+            "build-tools;35.0.0" "build-tools;36.0.0"
 
       - name: Set up Flutter (stable)
         uses: subosito/flutter-action@v2
