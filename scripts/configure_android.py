@@ -45,14 +45,21 @@ def set_application_id(text: str, path: Path) -> str:
 
 
 def set_sdk_versions(text: str) -> str:
-    text = re.sub(r'minSdkVersion\s+\d+', 'minSdkVersion 21', text)
-    text = re.sub(r'minSdk\s*=\s*\d+', 'minSdk = 21', text)
-    text = re.sub(r'targetSdkVersion\s+\d+', 'targetSdkVersion 35', text)
-    text = re.sub(r'targetSdk\s*=\s*\d+', 'targetSdk = 35', text)
-    # Flutter 3.5x ke plugins (file_picker / lifecycle) ko compileSdk >= 36 chahiye.
-    text = re.sub(r'compileSdkVersion\s+\d+', 'compileSdkVersion 36', text)
-    text = re.sub(r'compileSdk\s*=\s*\d+', 'compileSdk = 36', text)
-    text = re.sub(r'compileSdk\s+\d+', 'compileSdk 36', text)
+    # Flutter template aksar `compileSdk = flutter.compileSdkVersion` likhta hai.
+    # Line-start anchor zaroori hai warna `flutter.minSdkVersion` ke andar ke
+    # 'minSdkVersion' se match ho jata hai aur baqi line kha jati hai.
+    rules = [
+        (r'minSdkVersion\s+[^\n]+', 'minSdkVersion 21'),
+        (r'minSdk\s*=\s*[^\n]+', 'minSdk = 21'),
+        (r'targetSdkVersion\s+[^\n]+', 'targetSdkVersion 35'),
+        (r'targetSdk\s*=\s*[^\n]+', 'targetSdk = 35'),
+        # Flutter 3.5x plugins (file_picker/lifecycle) ko compileSdk >= 36 chahiye.
+        (r'compileSdkVersion\s+[^\n]+', 'compileSdkVersion 36'),
+        (r'compileSdk\s*=\s*[^\n]+', 'compileSdk = 36'),
+        (r'compileSdk\s+\d+[^\n]*', 'compileSdk 36'),
+    ]
+    for pattern, replacement in rules:
+        text = re.sub(r'(?m)^(\s*)' + pattern, r'\1' + replacement, text)
     return text
 
 
