@@ -1,4 +1,4 @@
-# Zahid Architecture Academy — Flutter (Full App v1.2.0)
+# Zahid Architecture Academy — Flutter (Full App v1.2.1)
 
 Real functionality ke saath poori app: Firebase Auth/Firestore/Storage, admin upload
 system, **verified** payments (pending/approved/rejected), 7-day trial, EN/UR/AR + RTL,
@@ -13,12 +13,12 @@ search/sort/filter/preview/downloads.
 
 **GitHub Repository:** https://github.com/shahid-boop/zahid-academy
 
-**Latest Release (v1.2.0):** https://github.com/shahid-boop/zahid-academy/releases/tag/v1.2.0
+**Latest Release (v1.2.1):** https://github.com/shahid-boop/zahid-academy/releases/tag/v1.2.1
 
 | File | Direct download |
 |---|---|
-| 📦 **APK** (testing ke liye) | https://github.com/shahid-boop/zahid-academy/releases/download/v1.2.0/app-release.apk |
-| 📦 **AAB** (Play Store ke liye) | https://github.com/shahid-boop/zahid-academy/releases/download/v1.2.0/app-release.aab |
+| 📦 **APK** (testing ke liye) | https://github.com/shahid-boop/zahid-academy/releases/download/v1.2.1/app-release.apk |
+| 📦 **AAB** (Play Store ke liye) | https://github.com/shahid-boop/zahid-academy/releases/download/v1.2.1/app-release.aab |
 
 **CI Run (successful):** https://github.com/shahid-boop/zahid-academy/actions/runs/45138205535
 
@@ -128,7 +128,7 @@ aur screenshot ka manual review rakhna best practice hai.
 Poori step-by-step guide: **[PLAY_STORE.md](PLAY_STORE.md)**
 
 **Build status:** ✅ APK + AAB GitHub Actions par successfully build ho gaye
-(run `45138205535`) aur GitHub Release `v1.2.0` par upload ho gaye — upar direct
+(run `45138205535`) aur GitHub Release `v1.2.1` par upload ho gaye — upar direct
 download links diye gaye hain. Local environment me Flutter SDK nahi hai, isliye
 build cloud par kiya gaya.
 
