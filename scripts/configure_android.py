@@ -129,6 +129,37 @@ def patch_build_file() -> None:
     print(f"configure_android: patched {path}")
 
 
+def disable_lint() -> None:
+    """CI me AGP lint crash (firebase_core) se bachne ke liye lint tasks band karo."""
+    root = ROOT / "android"
+    candidates = [root / "build.gradle", root / "build.gradle.kts"]
+    path = next((p for p in candidates if p.exists()), None)
+    if path is None:
+        print("configure_android: WARNING: root gradle file not found, lint not disabled")
+        return
+    text = path.read_text(encoding="utf-8")
+    marker = "// CI: lint disabled (AGP lint bug)"
+    if marker in text:
+        return
+    if path.name.endswith(".kts"):
+        block = (
+            '\n' + marker + '\n'
+            'allprojects {\n'
+            '    tasks.matching { it.name.lowercase().contains("lint") }\n'
+            '        .configureEach { isEnabled = false }\n'
+            '}\n'
+        )
+    else:
+        block = (
+            '\n' + marker + '\n'
+            'allprojects {\n'
+            "    tasks.matching { it.name.toLowerCase().contains('lint') }.all { enabled = false }\n"
+            '}\n'
+        )
+    path.write_text(text + block, encoding="utf-8")
+    print(f"configure_android: lint tasks disabled in {path.name}")
+
+
 def patch_manifest() -> None:
     if not MANIFEST.exists():
         fail(f"manifest not found: {MANIFEST}")
@@ -147,4 +178,5 @@ def patch_manifest() -> None:
 if __name__ == "__main__":
     patch_build_file()
     patch_manifest()
+    disable_lint()
     print("configure_android: done")
