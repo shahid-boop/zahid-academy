@@ -32,11 +32,28 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      # GitHub ubuntu runners me Android SDK pehle se installed hota hai.
+      # android-actions/setup-android@v3 ab fail karta hai (purana 'tools' package
+      # SDK manager se hataya gaya) - isliye directly use karte hain.
+      - name: Configure preinstalled Android SDK
+        run: |
+          SDK="/usr/local/lib/android/sdk"
+          CMDLINE=$(find "$SDK/cmdline-tools" -maxdepth 3 -type f -name sdkmanager | head -1)
+          if [ -z "$CMDLINE" ]; then
+            echo "Android SDK cmdline-tools not found on runner" >&2
+            exit 1
+          fi
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          echo "SDKMANAGER=$CMDLINE" >> "$GITHUB_ENV"
+          echo "$(dirname "$CMDLINE")" >> "$GITHUB_PATH"
+          echo "$SDK/platform-tools" >> "$GITHUB_PATH"
+          echo "Using SDK manager: $CMDLINE"
 
       - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Set up Flutter (stable)
         uses: subosito/flutter-action@v2
