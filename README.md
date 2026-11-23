@@ -9,6 +9,26 @@ search/sort/filter/preview/downloads.
 
 ---
 
+## 📥 Downloads (BUILD READY ✅)
+
+**GitHub Repository:** https://github.com/shahid-boop/zahid-academy
+
+**Latest Release (v1.2.0):** https://github.com/shahid-boop/zahid-academy/releases/tag/v1.2.0
+
+| File | Direct download |
+|---|---|
+| 📦 **APK** (testing ke liye) | https://github.com/shahid-boop/zahid-academy/releases/download/v1.2.0/app-release.apk |
+| 📦 **AAB** (Play Store ke liye) | https://github.com/shahid-boop/zahid-academy/releases/download/v1.2.0/app-release.aab |
+
+**CI Run (successful):** https://github.com/shahid-boop/zahid-academy/actions/runs/45138205535
+
+> ℹ️ Ye build **GitHub Actions** par banaya gaya hai (Flutter 3.50.1, JDK 17,
+> Android SDK 35/36). **Firebase secrets aur signing keystore set nahi hain**,
+> isliye ye **LOCAL DEMO / debug-signed** build hai. Signed + Firebase-connected
+> build ke liye `PLAY_STORE.md` me diye gaye secrets set karke workflow dobara chalayein.
+
+---
+
 ## 📁 Structure
 
 ```
@@ -107,9 +127,10 @@ aur screenshot ka manual review rakhna best practice hai.
 
 Poori step-by-step guide: **[PLAY_STORE.md](PLAY_STORE.md)**
 
-**Honest status:** yahan Flutter/Android SDK nahi hone ki wajah se
-**APK aur AAB abhi build nahi kiye gaye**. Code aur rules ready hain; build aapko
-apne system me above commands se karna hai.
+**Build status:** ✅ APK + AAB GitHub Actions par successfully build ho gaye
+(run `45138205535`) aur GitHub Release `v1.2.0` par upload ho gaye — upar direct
+download links diye gaye hain. Local environment me Flutter SDK nahi hai, isliye
+build cloud par kiya gaya.
 
 ---
 
@@ -123,4 +144,4 @@ PLAY_STORE.md me diya gaya hai (login, admin, payments, uploads, trial, RTL, etc
 - Screenshot admin manual review karta hai (OCR auto-verify nahi)
 - OS push notifications nahi — in-app notification center hai
 - Trial/payment "30 din" fixed hai; server-side expiry Cloud Function se better hoga
-- APK/AAB build + real device testing pending
+- Real device testing pending (APK/AAB build ✅ ho gaya — upar direct links)
