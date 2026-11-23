@@ -179,12 +179,9 @@ class _ContentTabState extends State<_ContentTab> {
   }
 
   Future<void> _pick() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-      allowMultiple: false,
-    );
-    if (result != null && result.files.isNotEmpty) {
-      setState(() => _picked = result.files.first);
+    final file = await FilePicker.pickFile(type: FileType.any);
+    if (file != null) {
+      setState(() => _picked = file);
     }
   }
 
