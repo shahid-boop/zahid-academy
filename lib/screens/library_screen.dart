@@ -61,7 +61,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
             (b.publishedAtMs ?? 0).compareTo(a.publishedAtMs ?? 0));
     }
 
-    final types = <String>{for (final f in app.contents) f.typeLabel}..sort();
+    final types = <String>{for (final f in app.contents) f.typeLabel}.toList()
+      ..sort();
 
     return Column(
       children: [

@@ -102,7 +102,7 @@ class AppFile {
       case FileKind.max3d:
         return Icons.view_in_ar_outlined;
       case FileKind.sketchup:
-        return Icons.cube_outlined;
+        return Icons.cube;
       case FileKind.map:
         return Icons.map_outlined;
       case FileKind.image:

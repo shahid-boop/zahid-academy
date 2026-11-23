@@ -270,7 +270,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (uri == null ||
           !uri.hasScheme ||
           !(uri.scheme == 'http' || uri.scheme == 'https') ||
-          !uri.hasHost) {
+          uri.host.isEmpty) {
         messenger.showSnackBar(SnackBar(content: Text(s.t('invalid_url'))));
         return;
       }

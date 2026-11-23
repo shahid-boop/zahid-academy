@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../models/app_file.dart';
 
 /// Local fallback data. Firebase configured hone par Firestore content isko override karta hai.
