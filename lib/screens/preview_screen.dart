@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:video_player/video_player.dart';
@@ -149,17 +152,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
     }
 
     switch (file.kind) {
-      case FileKind.lecture: // PDF
+      case FileKind.lecture: // PDF (bytes fetch karke inline)
         return Card(
           clipBehavior: Clip.antiAlias,
-          child: SizedBox(
-            height: 460,
-            child: PDFView(
-              url: url,
-              autoPlay: false,
-              onError: (_) => _placeholder(context, s, s.t('open_failed')),
-            ),
-          ),
+          child: SizedBox(height: 460, child: _PdfViewer(url: url)),
         );
 
       case FileKind.video:
@@ -244,6 +240,53 @@ class _PreviewScreenState extends State<PreviewScreen> {
         ],
       ),
     );
+  }
+}
+
+/// PDF ko URL se memory me download karke inline render karta hai.
+class _PdfViewer extends StatefulWidget {
+  final String url;
+
+  const _PdfViewer({required this.url});
+
+  @override
+  State<_PdfViewer> createState() => _PdfViewerState();
+}
+
+class _PdfViewerState extends State<_PdfViewer> {
+  Uint8List? _bytes;
+  bool _error = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final uri = Uri.parse(widget.url);
+      final request = await HttpClient().getUrl(uri);
+      final response = await request.close();
+      final bytes = await response.fold<Uint8List>(
+        Uint8List(0),
+        (previous, chunk) => Uint8List.fromList([...previous, ...chunk]),
+      );
+      if (mounted) setState(() => _bytes = bytes);
+    } catch (_) {
+      if (mounted) setState(() => _error = true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_error) {
+      return const Center(child: Icon(Icons.broken_image, size: 48));
+    }
+    if (_bytes == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return PDFView(pdfData: _bytes);
   }
 }
 
