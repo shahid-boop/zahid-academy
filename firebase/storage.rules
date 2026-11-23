@@ -1,0 +1,27 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return signedIn()
+        && get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Payment screenshots: user apna upload kare, admin ya khud hi dekhe.
+    match /payment-screenshots/{uid}/{file} {
+      allow write: if signedIn()
+                   && uid == request.auth.uid
+                   && request.resource.size < 5 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+      allow read: if signedIn() && (uid == request.auth.uid || isAdmin());
+    }
+
+    // Content files: read public (published content), upload sirf admin.
+    match /contents/{file} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
